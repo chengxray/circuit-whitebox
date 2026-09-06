@@ -89,9 +89,32 @@ export const SchematicCanvas: React.FC = () => {
     return [start, { x: end.x, y: start.y }, end];
   };
 
+  // Spacebar pan mode
+  const [isSpacePressed, setIsSpacePressed] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.code === 'Space' && !e.repeat) {
+        setIsSpacePressed(true);
+      }
+    };
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        setIsSpacePressed(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
   const handlePointerDown = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
-    // Middle click or Alt+click = pan
-    if (e.button === 1 || (e.button === 0 && e.altKey)) {
+    // Pan trigger: Middle click, Alt+click, Space+drag, or 'pan' mode
+    if (e.button === 1 || (e.button === 0 && (e.altKey || isSpacePressed || store.mode === 'pan'))) {
       setIsPanning(true);
       setPanStart({ x: e.clientX, y: e.clientY });
       setPanVB({ x: viewBox.x, y: viewBox.y });
@@ -126,7 +149,7 @@ export const SchematicCanvas: React.FC = () => {
       setSelectedCompId(null);
       setSelectedWireId(null);
     }
-  }, [store, viewBox, wireStart, getSVGPoint]);
+  }, [store, viewBox, wireStart, getSVGPoint, isSpacePressed]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
     if (isPanning) {
@@ -152,6 +175,28 @@ export const SchematicCanvas: React.FC = () => {
     }
   }, [isPanning, panStart, panVB, draggedCompId, dragOffset, store, wireStart, getSVGPoint]);
 
+  const handleWheel = useCallback((e: React.WheelEvent<SVGSVGElement>) => {
+    e.preventDefault();
+    const zoomFactor = e.deltaY < 0 ? 0.9 : 1.1;
+    setViewBox(prev => {
+      const newW = prev.w * zoomFactor;
+      const newH = prev.h * zoomFactor;
+      // Zoom centered at mouse position
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      const rect = svgRef.current?.getBoundingClientRect();
+      if (!rect) return prev;
+      const ratioX = (mouseX - rect.left) / rect.width;
+      const ratioY = (mouseY - rect.top) / rect.height;
+      return {
+        x: prev.x + (prev.w - newW) * ratioX,
+        y: prev.y + (prev.h - newH) * ratioY,
+        w: newW,
+        h: newH,
+      };
+    });
+  }, []);
+
   const handlePointerUp = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
     setIsPanning(false);
     setDraggedCompId(null);
@@ -162,13 +207,14 @@ export const SchematicCanvas: React.FC = () => {
 
   // Telemetry current map
   const currentMap = new Map<string, number>();
-  // (wire-to-current mapping would need net analysis; simplified here)
 
   const viewBoxStr = `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`;
-  const cursorClass = store.mode === 'place' || store.mode === 'wire'
-    ? 'cursor-crosshair'
-    : isPanning
+  const cursorClass = isPanning
     ? 'cursor-grabbing'
+    : isSpacePressed || store.mode === 'pan'
+    ? 'cursor-grab'
+    : store.mode === 'place' || store.mode === 'wire'
+    ? 'cursor-crosshair'
     : 'cursor-default';
 
   const selectedComp = selectedCompId
@@ -194,6 +240,7 @@ export const SchematicCanvas: React.FC = () => {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerUp}
+        onWheel={handleWheel}
         className={cursorClass}
         style={{ touchAction: 'none' }}
       >

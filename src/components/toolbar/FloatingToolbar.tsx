@@ -64,6 +64,7 @@ export function FloatingToolbar() {
           <button className={getBtnClass(mode === 'select')} onClick={() => store.setMode('select')}>選取</button>
           <button className={getBtnClass(mode === 'wire')} onClick={() => store.setMode('wire')}>導線</button>
           <button className={getBtnClass(mode === 'place')} onClick={() => store.setMode('place')}>放置</button>
+          <button className={getBtnClass(mode === 'pan')} onClick={() => store.setMode('pan')}>✋ 拖動畫布</button>
         </div>
       </div>
 

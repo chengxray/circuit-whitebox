@@ -106,7 +106,7 @@ export interface CircuitState {
   wires: Wire[];
   // 選取與互動
   selectedId: string | null;
-  mode: 'select' | 'wire' | 'place';
+  mode: 'select' | 'wire' | 'place' | 'pan';
   placingType: ComponentType | null;
   // 分析模式
   analysisMode: 'DC' | 'AC';
