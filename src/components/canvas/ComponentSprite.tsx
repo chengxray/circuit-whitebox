@@ -1,11 +1,11 @@
 import React from 'react';
-import { Component, ComponentTelemetry } from '../../core/mna/types';
+import type {  Component, ComponentTelemetry  } from "../../core/mna/types";
 
 interface ComponentSpriteProps {
   comp: Component;
   isSelected: boolean;
-  onClick: (e: React.PointerEvent) => void;
-  onDragStart: (e: React.PointerEvent) => void;
+  onClick: (e: React.MouseEvent<SVGGElement>) => void;
+  onDragStart: (e: React.PointerEvent<SVGGElement>) => void;
   showPins: boolean;
   result?: ComponentTelemetry | null;
 }

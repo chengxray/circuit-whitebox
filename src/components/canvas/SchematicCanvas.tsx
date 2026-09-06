@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useCircuitStore, genId, calcPins } from '../../store/circuitStore';
+import { useCircuitStore, genId } from '../../store/circuitStore';
 import { ComponentSprite } from './ComponentSprite';
 import { WireLayer } from './WireLayer';
 import { OverlayLayer } from './OverlayLayer';
 import { PopupEditor } from './PopupEditor';
-import { Wire, Point } from '../../core/mna/types';
+import type {  Wire, Point  } from "../../core/mna/types";
 
 const GRID = 20;
 function snap(v: number): number { return Math.round(v / GRID) * GRID; }
@@ -80,16 +80,7 @@ export const SchematicCanvas: React.FC = () => {
     return { x: snap(t.x), y: snap(t.y) };
   }, []);
 
-  const getRawSVGPoint = useCallback((e: React.PointerEvent): Point => {
-    if (!svgRef.current) return { x: 0, y: 0 };
-    const pt = svgRef.current.createSVGPoint();
-    pt.x = e.clientX;
-    pt.y = e.clientY;
-    const inv = svgRef.current.getScreenCTM()?.inverse();
-    if (!inv) return { x: 0, y: 0 };
-    const t = pt.matrixTransform(inv);
-    return { x: t.x, y: t.y };
-  }, []);
+
 
   // Orthogonal wire routing
   const routeWire = (start: Point, end: Point, diagonal: boolean): Point[] => {
@@ -112,7 +103,6 @@ export const SchematicCanvas: React.FC = () => {
     const pt = getSVGPoint(e);
 
     if (store.mode === 'place' && store.placingType) {
-      const { pins, pin3 } = calcPins(store.placingType, pt, 0);
       store.addComponent(store.placingType, pt);
       store.setMode('select');
       return;

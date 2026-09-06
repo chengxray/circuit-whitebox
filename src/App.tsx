@@ -1,4 +1,3 @@
-import React from 'react';
 import { SchematicCanvas } from './components/canvas/SchematicCanvas';
 import { FloatingToolbar } from './components/toolbar/FloatingToolbar';
 import { InspectorDrawer } from './components/inspector/InspectorDrawer';

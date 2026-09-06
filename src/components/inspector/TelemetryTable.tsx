@@ -4,7 +4,7 @@ import { smartFormatUnit } from '../../core/mna/gaussSolver';
 
 export const TelemetryTable: React.FC = () => {
   const store = useCircuitStore();
-  const telemetry = store.telemetry || [];
+  const telemetry = store.mnaResult?.telemetry || [];
 
   if (telemetry.length === 0) {
     return (

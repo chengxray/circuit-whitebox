@@ -2,7 +2,7 @@
 // 範例電路資料
 // ============================================================
 
-import { Component, Wire } from '../core/mna/types';
+import type { Component, Wire } from '../core/mna/types';
 import { calcPins } from '../store/circuitStore';
 
 // ── 工具函式 ─────────────────────────────────────────────

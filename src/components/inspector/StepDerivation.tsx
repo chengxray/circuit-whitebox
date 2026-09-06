@@ -12,7 +12,7 @@ export const StepDerivation: React.FC = () => {
   }
 
   const kclLines = mnaResult.kclLines || [];
-  const telemetry = store.telemetry || [];
+  const telemetry = mnaResult.telemetry || [];
 
   return (
     <div className="p-4 h-full overflow-y-auto">
@@ -39,9 +39,9 @@ export const StepDerivation: React.FC = () => {
         <div>
           <h3 className="text-md font-semibold mb-2">解得結果</h3>
           <ul className="list-disc pl-5">
-            {mnaResult.solutionLabels?.map((label: string, i: number) => (
+            {mnaResult.matrix.colLabels.map((label: string, i: number) => (
               <li key={i} className="font-mono">
-                {label} = {mnaResult.solution[i].toFixed(2)}
+                {label} = {mnaResult.nodeVoltages[i] !== undefined ? mnaResult.nodeVoltages[i].toFixed(2) : ''}
               </li>
             ))}
           </ul>

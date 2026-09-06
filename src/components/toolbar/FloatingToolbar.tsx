@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useCircuitStore } from '../../store/circuitStore';
 import { EXAMPLES } from '../../examples/circuits';
 import { ThemeToggle } from '../theme/ThemeToggle';
-import { ComponentType } from '../../core/mna/types';
+import type {  ComponentType  } from "../../core/mna/types";
 
 export function FloatingToolbar() {
   const store = useCircuitStore();
@@ -70,16 +70,29 @@ export function FloatingToolbar() {
       <div className="p-2 border-b border-gray-200 dark:border-gray-700">
         <div className="text-xs font-semibold mb-1">元件</div>
         <div className="grid grid-cols-3 gap-1">
-          {['R', 'C', 'L', 'Vdc', 'Vac', 'Idc', 'Iac', 'GND', 'OpAmp', 'VCVS', 'CCCS', 'VCCS', 'CCVS'].map(type => (
+          {[
+            { label: 'R', type: 'resistor' },
+            { label: 'C', type: 'capacitor' },
+            { label: 'L', type: 'inductor' },
+            { label: 'Vdc', type: 'vSourceDC' },
+            { label: 'Vac', type: 'vSourceAC' },
+            { label: 'Idc', type: 'iSourceDC' },
+            { label: 'Iac', type: 'iSourceAC' },
+            { label: 'GND', type: 'ground' },
+            { label: 'OpAmp', type: 'opamp' },
+            { label: 'VCVS', type: 'vcvs' },
+            { label: 'CCCS', type: 'cccs' },
+            { label: 'VCCS', type: 'vccs' },
+            { label: 'CCVS', type: 'ccvs' },
+          ].map(item => (
             <button 
-              key={type}
-              className={getBtnClass(mode === 'place' && placingType === type)}
+              key={item.type}
+              className={getBtnClass(mode === 'place' && placingType === item.type)}
               onClick={() => {
-                store.setMode('place');
-                store.setPlacingType(type as ComponentType);
+                store.setMode('place', item.type as ComponentType);
               }}
             >
-              {type}
+              {item.label}
             </button>
           ))}
         </div>
@@ -109,17 +122,18 @@ export function FloatingToolbar() {
         <select 
           className="w-full p-1 border rounded text-sm dark:bg-gray-700 dark:border-gray-600"
           onChange={e => {
-            // Assume examples are exported as array or object, safely check
-            if (Array.isArray(EXAMPLES)) {
-              const ex = EXAMPLES.find(x => x.id === e.target.value);
-              if (ex) store.loadCircuit(ex);
+            const index = Number(e.target.value);
+            const ex = EXAMPLES[index];
+            if (ex) {
+              const data = ex.create();
+              store.loadCircuit(data.components, data.wires);
             }
           }}
           defaultValue=""
         >
           <option value="" disabled>載入範例 ▼</option>
-          {Array.isArray(EXAMPLES) && EXAMPLES.map(ex => (
-            <option key={ex.id} value={ex.id}>{ex.name}</option>
+          {EXAMPLES.map((ex, idx) => (
+            <option key={idx} value={idx}>{ex.name}</option>
           ))}
         </select>
       </div>
@@ -132,7 +146,7 @@ export function FloatingToolbar() {
           {isSolving ? 'Solving...' : '⚡ Solve'}
         </button>
         <div className="flex gap-1">
-          <button className="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 p-1 rounded text-sm" onClick={() => store.resetCircuit?.()}>↺ Reset</button>
+          <button className="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 p-1 rounded text-sm" onClick={() => store.reset()}>↺ Reset</button>
           <button className="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 p-1 rounded text-sm" onClick={() => store.undo?.()}>↩ Undo</button>
         </div>
       </div>

@@ -4,7 +4,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Component, ComponentType, Wire, MNAResult, Point } from '../core/mna/types';
+import type { Component, ComponentType, Wire, MNAResult, Point } from '../core/mna/types';
 import { solveCircuit } from '../core/mna/netlist';
 
 // ── 工具：產生不重複 ID ──────────────────────────────────
@@ -241,7 +241,7 @@ export const useCircuitStore = create<CircuitState>()(
         }));
       },
 
-      setMode: (mode, placingType = null) => set({ mode, placingType }),
+      setMode: (mode, placingType) => set({ mode, placingType: placingType ?? null }),
       setSelected: (id) => set({ selectedId: id }),
 
       solve: () => {

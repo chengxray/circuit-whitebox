@@ -1,5 +1,5 @@
 import React from 'react';
-import { Component, ComponentTelemetry } from '../../core/mna/types';
+import type {  Component, ComponentTelemetry  } from "../../core/mna/types";
 import { smartFormatUnit } from '../../core/mna/gaussSolver';
 
 interface OverlayLayerProps {
@@ -15,7 +15,7 @@ export const OverlayLayer: React.FC<OverlayLayerProps> = ({ components, telemetr
         const comp = components.find(c => c.id === t.componentId);
         if (!comp) return null;
 
-        const voltageStr = smartFormatUnit(Math.abs(t.voltageDrop), 'V');
+        const voltageStr = smartFormatUnit(Math.abs(t.deltaV), 'V');
         const currentStr = smartFormatUnit(Math.abs(t.current), 'A');
         
         const isDissipating = t.power > 0;
@@ -24,8 +24,8 @@ export const OverlayLayer: React.FC<OverlayLayerProps> = ({ components, telemetr
         return (
           <foreignObject
             key={t.componentId}
-            x={comp.position.x - 60}
-            y={comp.position.y + 40}
+            x={comp.pos.x - 60}
+            y={comp.pos.y + 40}
             width="120"
             height="60"
             className="overflow-visible"

@@ -4,7 +4,7 @@ import { useCircuitStore } from '../../store/circuitStore';
 
 export const BodePlot: React.FC = () => {
   const store = useCircuitStore();
-  const bodeData = store.bodeData;
+  const bodeData = store.mnaResult?.bodeData;
 
   if (!bodeData || bodeData.length === 0) {
     return (
@@ -21,11 +21,11 @@ export const BodePlot: React.FC = () => {
       <div className="mb-4 flex items-center gap-2">
         <label className="text-sm font-semibold">輸出節點:</label>
         <input 
-          type="text" 
-          value={store.bodeOutputNet || ''} 
-          onChange={(e) => store.setBodeOutputNet?.(e.target.value)}
+          type="number" 
+          value={store.bodeOutputNet || 1} 
+          onChange={(e) => store.setBodeOutputNet?.(Number(e.target.value) || 1)}
           className="border rounded px-2 py-1 text-sm w-24 border-gray-300 dark:border-gray-600 dark:bg-gray-800"
-          placeholder="e.g. n2"
+          placeholder="e.g. 1"
         />
       </div>
 

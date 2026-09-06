@@ -2,7 +2,8 @@
 // AC Analysis — 頻率掃描與 Bode Plot 計算
 // ============================================================
 
-import { Component, BodePoint, complex } from './types';
+import type { Component, BodePoint } from './types';
+import { complex } from './types';
 import { buildMNA } from './mnaEngine';
 import { gaussElimComplex } from './gaussSolver';
 

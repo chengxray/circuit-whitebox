@@ -3,7 +3,7 @@
 // 將畫布上的導線端點和元件引腳合併成電氣網路（Net）
 // ============================================================
 
-import { Point, Wire, Component, Net, NetlistResult } from './types';
+import type { Point, Wire, Component, Net, NetlistResult } from './types';
 
 const GRID = 20; // px
 
@@ -129,7 +129,7 @@ export function buildNets(
 
   // 6. 建立 Net 物件
   const netMap: Map<number, Net> = new Map();
-  for (const [root, netId] of rootToNet) {
+  for (const [, netId] of rootToNet) {
     netMap.set(netId, { id: netId, pinKeys: new Set() });
   }
 

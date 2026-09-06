@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useCircuitStore } from '../../store/circuitStore';
+
 import { MNAMatrixView } from './MNAMatrixView';
 import { StepDerivation } from './StepDerivation';
 import { TelemetryTable } from './TelemetryTable';
 import { BodePlot } from './BodePlot';
 
 export const InspectorDrawer: React.FC = () => {
-  const store = useCircuitStore();
   const [height, setHeight] = useState(300);
   const [collapsed, setCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState(0);

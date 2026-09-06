@@ -3,7 +3,9 @@
 // 支援實數（DC）和複數（AC）兩種模式
 // ============================================================
 
-import { GaussStep, Complex, complex } from './types';
+import type { GaussStep, Complex } from './types';
+import { complex } from './types';
+export type { GaussStep };
 
 // ── 實數 Gaussian 消去（DC）─────────────────────────────
 export interface GaussResult {
@@ -22,7 +24,6 @@ export function gaussElimReal(
   const A = Ain.map(row => [...row]);
   const B = [...Bin];
   const steps: GaussStep[] = [];
-  const rowOrder = Array.from({ length: n }, (_, i) => i);
 
   for (let col = 0; col < n; col++) {
     // 找部分主元（同列中最大絕對值）

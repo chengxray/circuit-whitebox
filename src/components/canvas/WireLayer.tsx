@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wire } from '../../core/mna/types';
+import type {  Wire  } from "../../core/mna/types";
 
 interface WireLayerProps {
   wires: Wire[];

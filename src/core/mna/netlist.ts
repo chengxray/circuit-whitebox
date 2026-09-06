@@ -2,10 +2,10 @@
 // Netlist Builder + Circuit Solver Orchestrator
 // ============================================================
 
-import { Component, Wire, MNAResult, ComponentTelemetry, KCLLine, complex } from './types';
+import type { Component, Wire, MNAResult, ComponentTelemetry } from './types';
 import { buildNets } from './unionFind';
 import { buildMNA, toSI } from './mnaEngine';
-import { gaussElimReal, gaussElimComplex, smartFormat } from './gaussSolver';
+import { gaussElimReal, gaussElimComplex } from './gaussSolver';
 import { sweepFrequency } from './acAnalysis';
 
 // ── 主求解函式 ───────────────────────────────────────────
@@ -60,7 +60,7 @@ export function solveCircuit(
   // 3. 求解
   let nodeVoltages: number[] = [];
   let sourceCurrents: number[] = [];
-  let gaussSteps = [];
+  let gaussSteps: import('./gaussSolver').GaussStep[] = [];
 
   if (mode === 'DC') {
     const sol = gaussElimReal(matrix.numericA, matrix.numericB);

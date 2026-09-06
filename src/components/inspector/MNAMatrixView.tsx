@@ -25,8 +25,8 @@ export const MNAMatrixView: React.FC = () => {
 
   if (gaussSteps && gaussSteps.length > 0 && mode === 'numeric') {
     const step = gaussSteps[stepIndex];
-    A = step.A;
-    b = step.b;
+    A = step.matrixSnapshot;
+    b = step.bSnapshot;
     pivotRow = step.pivotRow;
     pivotCol = step.pivotCol;
     stepDesc = step.description;

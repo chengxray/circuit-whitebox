@@ -3,7 +3,8 @@
 // 同時產生符號矩陣（LaTeX）和數字矩陣（Float64）
 // ============================================================
 
-import { Component, ComponentType, MNAMatrix, KCLLine, Complex, complex } from './types';
+import type { Component, MNAMatrix, KCLLine, Complex } from './types';
+import { complex } from './types';
 
 // ── 值域轉換（含單位）────────────────────────────────────
 export function toSI(value: number, unit: string): number {
