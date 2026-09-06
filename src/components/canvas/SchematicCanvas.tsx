@@ -179,6 +179,12 @@ export const SchematicCanvas: React.FC = () => {
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-gray-50 dark:bg-gray-950">
+      {mnaResult?.error && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-40 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium flex items-center gap-2 max-w-md animate-fade-in">
+          <span>⚠️</span>
+          <span>{mnaResult.error}</span>
+        </div>
+      )}
       <svg
         ref={svgRef}
         width="100%"

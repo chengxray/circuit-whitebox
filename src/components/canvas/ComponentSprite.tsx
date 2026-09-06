@@ -138,8 +138,9 @@ export const ComponentSprite: React.FC<ComponentSpriteProps> = ({
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${rotation})`}
       className="fill-current text-gray-800 dark:text-gray-100 cursor-pointer"
-      onPointerDown={onDragStart}
-      onClick={onClick}
+      onPointerDown={showPins ? undefined : onDragStart}
+      onClick={showPins ? undefined : onClick}
+      pointerEvents={showPins ? 'none' : undefined}
     >
       <defs>
         <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
